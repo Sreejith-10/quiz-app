@@ -14,8 +14,8 @@ export const Header = () => {
 	const {theme, setTheme} = useTheme();
 
 	return (
-		<div>
-			<span>QuizMania</span>
+		<div className="h-20 flex items-center justify-between px-5">
+			<span className="font-bold text-2xl">QuizMania</span>
 			<nav>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>

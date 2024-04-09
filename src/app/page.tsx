@@ -6,7 +6,7 @@ export default function Home() {
 			<div className="flex items-center flex-col">
 				<h2>Welcome to quiz world</h2>
 				<span>A Quiz platform to test your knowledge</span>
-				<Link href={"/quiz"}>Get Started</Link>
+				<Link href={"/category"}>Get Started</Link>
 			</div>
 		</main>
 	);
