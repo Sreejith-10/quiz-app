@@ -1,14 +1,18 @@
+"use client";
+
 import {Tile} from "@/components/tile";
-import {Button} from "@/components/ui/button";
+import {fetchCategory} from "@/lib/controllers";
+import {useQuery} from "@tanstack/react-query";
+import Link from "next/link";
+import {useState} from "react";
 
 const CategoryPage = () => {
-	const categories = [
-		{
-			value: "Sports",
-			icon: "",
-			color: "#d42a2a",
-		},
-	];
+	const [category, setCategory] = useState(0);
+
+	const {data, isLoading} = useQuery<{id: number; name: string}[]>({
+		queryKey: ["trivia_categories"],
+		queryFn: fetchCategory,
+	});
 
 	return (
 		<div className="w-full pt-10 flex items-center justify-center flex-col">
@@ -18,13 +22,13 @@ const CategoryPage = () => {
 					answer correctly
 				</p>
 			</div>
-			<div>
-				{categories.map((item, index) => (
-					<Tile items={item} key={index} />
+			<div className="flex flex-wrap gap-5">
+				{data?.map((item) => (
+					<Tile items={item} key={item.id} onclick={setCategory} />
 				))}
 			</div>
 			<div>
-				<Button>Start Quiz</Button>
+				<Link href={`/quiz/${category}`}>Start Quiz</Link>
 			</div>
 		</div>
 	);
