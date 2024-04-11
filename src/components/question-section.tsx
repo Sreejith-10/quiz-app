@@ -1,7 +1,8 @@
 "use client";
 
-import {SetStateAction, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import {Button} from "./ui/button";
+import {shuffle} from "@/lib/shuffle";
 
 interface QuestionSectionProps {
 	item: {
@@ -25,11 +26,12 @@ export const QuestionSection = ({
 }: QuestionSectionProps) => {
 	const [disable, setDisable] = useState(false);
 
-	const [answer, _setAnswer] = useState(item?.correct_answer);
 	const [choice, setChoice] = useState("");
 
+	const [shuffled, setShuffled] = useState<string[]>();
+
 	const checkAnswer = async (key: string) => {
-		if (key === answer) {
+		if (key === item?.correct_answer) {
 			setScore((prev) => prev + 1);
 		}
 		setDisable(true);
@@ -38,6 +40,15 @@ export const QuestionSection = ({
 		setIndex(index + 1);
 		setDisable(false);
 	};
+
+	useEffect(() => {
+		const randomArray = shuffle([
+			...item?.incorrect_answers,
+			item?.correct_answer,
+		]);
+
+		setShuffled(randomArray);
+	}, [item]);
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-10">
@@ -60,29 +71,19 @@ export const QuestionSection = ({
 				/>
 			</div>
 			<div className="w-full grid grid-cols-2 gap-5">
-				<Button
-					onClick={() => checkAnswer(item?.correct_answer)}
-					disabled={disable}
-					className={`min-w-1/2 h-20 text-[15px] flex items-center justify-center border  rounded-lg  py-4 px-2 font-medium ${
-						disable
-							? choice === answer
-								? "bg-emerald-500/70 border-emerald-500 hover:bg-emerald-500/40 hover:text-emerald-600"
-								: "bg-emerald-500/70 border-emerald-500 hover:bg-emerald-500/40 hover:text-emerald-600"
-							: "border-slate-500 border-opacity-30 bg-white text-slate-700 hover:bg-white"
-					}`}
-					dangerouslySetInnerHTML={{__html: item?.correct_answer}}
-				/>
-				{item?.incorrect_answers?.map((question, index) => (
+				{shuffled?.map((question, index) => (
 					<Button
 						onClick={() => checkAnswer(question)}
 						key={index}
 						disabled={disable}
-						className={`min-w-1/2 h-20 text-[15px] flex items-center justify-center border border-slate-500 rounded-lg border-opacity-30 py-4 px-2 font-medium bg-white text-slate-700 hover:bg-white ${
+						className={`min-w-1/2 h-20 text-[15px] flex items-center justify-center border rounded-lg border-opacity-30 py-4 px-2 font-medium ${
 							disable
-								? choice === question
-									? "bg-destructive/20 text-destructive border-destructive hover:bg-destructive/40 hover:text-destructive"
-									: ""
-								: "border-slate-500 border-opacity-30 bg-white text-slate-700 hover:bg-white"
+								? item?.correct_answer === question
+									? "bg-emerald-500 dark:text-slate-50"
+									: choice !== item?.correct_answer && choice === question
+									? "bg-destructive dark:text-slate-50"
+									: "border-slate-500 bg-white text-slate-700 hover:bg-white"
+								: "border-slate-500 bg-white text-slate-700 hover:bg-white"
 						}`}
 						dangerouslySetInnerHTML={{__html: question}}
 					/>

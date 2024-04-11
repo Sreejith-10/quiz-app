@@ -10,7 +10,7 @@ export default function QuizLayout({
 			<header>
 				<Header />
 			</header>
-			<main>
+			<main className="py-10">
 				<section>{children}</section>
 			</main>
 		</>

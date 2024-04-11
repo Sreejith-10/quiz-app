@@ -3,6 +3,7 @@
 import {QuestionSection} from "@/components/question-section";
 import {fetchQuestions} from "@/lib/controllers";
 import {useQuery} from "@tanstack/react-query";
+import Link from "next/link";
 import {useEffect, useState} from "react";
 
 const QuizPage = ({params}: any) => {
@@ -37,8 +38,15 @@ const QuizPage = ({params}: any) => {
 							setScore={setScore}
 						/>
 					) : (
-						<div>
-							<h1>Fianl score : {score} / 10</h1>
+						<div className="flex items-center justify-center flex-col gap-10">
+							<h1 className="font-bold text-xl text-center">
+								Fianl score : {score} / 10
+							</h1>
+							<Link
+								className="bg-blue-500 py-3 px-4 rounded-lg font-semibold text-white"
+								href={"/category"}>
+								Try again
+							</Link>
 						</div>
 					)
 				) : null}

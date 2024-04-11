@@ -12,10 +12,11 @@ const CategoryPage = () => {
 	const {data, isLoading} = useQuery<{id: number; name: string}[]>({
 		queryKey: ["trivia_categories"],
 		queryFn: fetchCategory,
+		staleTime: 30000,
 	});
 
 	return (
-		<div className="w-full pt-10 flex items-center justify-center flex-col">
+		<div className="w-full flex items-center justify-center flex-col gap-10">
 			<div>
 				<p className="font-semibold text-xl">
 					Choose one from the categories below & see how many questions you can
@@ -24,11 +25,20 @@ const CategoryPage = () => {
 			</div>
 			<div className="flex flex-wrap gap-5">
 				{data?.map((item) => (
-					<Tile items={item} key={item.id} onclick={setCategory} />
+					<Tile
+						items={item}
+						id={category}
+						key={item.id}
+						onclick={setCategory}
+					/>
 				))}
 			</div>
 			<div>
-				<Link href={`/quiz/${category}`}>Start Quiz</Link>
+				<Link
+					className="bg-blue-500 py-3 px-4 rounded-lg font-semibold text-white"
+					href={`/quiz/${category}`}>
+					Start Quiz
+				</Link>
 			</div>
 		</div>
 	);
